@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use Illuminate\Http\Request;
+use App\Http\Requests\ClienteStoreRequest;
 
 class ClienteController extends Controller
 {
@@ -14,10 +15,10 @@ class ClienteController extends Controller
         return response()->json($clientes, 200);
     }
 
-    public function store(Request $request)
+    public function store(ClienteStoreRequest $request)
     {
-        $cliente = Cliente::create($request->all());
-        return response()->json($cliente, 201);
+       dd($request->all());
+
     }
 
     public function show(Cliente $cliente)
