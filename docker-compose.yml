@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+    environment:
+      MYSQL_DATABASE: comerc
+      MYSQL_ROOT_PASSWORD: comerc2023
+      MYSQL_USER: usercomerc
+      MYSQL_PASSWORD: passcomerc
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: comerc
+      MYSQL_ROOT_PASSWORD: comerc2023
+      MYSQL_USER: usercomerc
+      MYSQL_PASSWORD: passcomerc
