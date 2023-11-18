@@ -4,62 +4,80 @@ namespace App\Http\Controllers;
 
 use App\Models\Pedido;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Resources\PedidoResource;
 
 class PedidoController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
-        //
+        return Pedido::all();
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            $pedido = Pedido::create([
+                'cliente_id' => $request->cliente_id,
+            ]);
+
+            // Adicione os produtos ao pedido
+            foreach ($request->produtos as $produto) {
+                $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
+            }
+
+            DB::commit();
+
+            return response()->json($pedido, 201);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Pedido $pedido)
     {
-        //
+        $pedido = Pedido::with('produtos')->find($pedido->id);
+
+        return new PedidoResource($pedido);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pedido $pedido)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Pedido $pedido)
     {
-        //
+        try {
+            $pedido->update($request->all());
+            return response()->json($pedido, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Erro ao atualizar pedido', 'error' => $e->getMessage()], 400);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+
     public function destroy(Pedido $pedido)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            $produtoIds = $pedido->produtos()->pluck('produto_id')->toArray();
+
+            $pedido->produtos()->updateExistingPivot($produtoIds, ['deleted_at' => now()]);
+
+            $pedido->delete();
+
+            DB::commit();
+
+            return response()->json(['message' => 'Pedido excluído com sucesso'], 200);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
+        }
     }
 }

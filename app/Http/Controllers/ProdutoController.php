@@ -13,27 +13,27 @@ class ProdutoController extends Controller
 
     public function index()
     {
+
+
         $produtos = Produto::all();
         return response()->json($produtos, 200);
-
     }
 
     public function store(ProdutoRequest $request)
     {
-        dd($request->all());
         try {
             if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $nomeFoto = time() . '_' . $foto->getClientOriginalName();
+                $foto = $request->file('foto');
+                $nomeFoto = time() . '_' . $foto->getClientOriginalName();
 
-            Storage::disk('public')->put($nomeFoto, file_get_contents($foto));
+                Storage::disk('public')->put($nomeFoto, file_get_contents($foto));
 
-            $dadosProduto = $request->all();
-            $dadosProduto['foto'] = $nomeFoto;
+                $dadosProduto = $request->all();
+                $dadosProduto['foto'] = $nomeFoto;
 
-            $produto = Produto::create($dadosProduto);
-            return response()->json($produto, 201);
-        }
+                $produto = Produto::create($dadosProduto);
+                return response()->json($produto, 201);
+            }
         } catch (\Exception $e) {
             return response()->json(['error' => 'Não é possível criar o produto'], 400);
         }
@@ -43,7 +43,6 @@ class ProdutoController extends Controller
     public function show(Produto $produto)
     {
         return response()->json($produto, 200);
-
     }
 
     //TODO: Implementar o update

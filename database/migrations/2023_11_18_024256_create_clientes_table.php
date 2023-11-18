@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('complemento')->nullable();
             $table->string('bairro');
             $table->string('cep');
-            $table->date('data_cadastro');
+            $table->date('data_cadastro'); // talvez não seja necessário pois temos o created_at
             $table->softDeletes();
             $table->timestamps();
         });

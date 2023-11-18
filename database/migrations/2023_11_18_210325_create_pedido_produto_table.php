@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pedidos', function (Blueprint $table) {
+        Schema::create('pedido_produto', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('clientes');
-            $table->timestamp('data_criacao')->useCurrent(); // talvez não seja necessário pois temos o created_at
-            $table->softDeletes();
+            $table->foreignId('pedido_id')->constrained('pedidos');
+            $table->foreignId('produto_id')->constrained('produtos');
+            $table->integer('quantidade'); // Adicione outros campos conforme necessário
+            $table->softDeletes(); // Adicionando soft delete
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pedidos');
+        Schema::dropIfExists('pedido_produto');
     }
 };

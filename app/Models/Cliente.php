@@ -28,4 +28,9 @@ class Cliente extends Model
         'data_cadastro',
     ];
 
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'cliente_id');
+
+    }
 }
