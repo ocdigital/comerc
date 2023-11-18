@@ -33,11 +33,6 @@ class ClienteStoreRequest extends FormRequest
             'bairro' => 'required|string',
             'cep' => 'required|string'
         ];
-
-        if ($this->isMethod('put') || $this->isMethod('patch')) {
-            $rules['email'] = 'required|email|unique:clientes,email,' . $this->route('cliente');
-        }
-
     }
 
     public function failedValidation(Validator $validator): void
