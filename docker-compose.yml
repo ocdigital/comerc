@@ -18,11 +18,18 @@ services:
       - db
 
   db:
-    image: mysql:8.0
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_DATABASE: comerc
-      MYSQL_ROOT_PASSWORD: comerc2023
-      MYSQL_USER: usercomerc
-      MYSQL_PASSWORD: passcomerc
+      image: mysql:8.0
+      ports:
+          - "3307:3306"
+      environment:
+          MYSQL_DATABASE: comerc
+          MYSQL_ROOT_PASSWORD: comerc2023
+          MYSQL_USER: usercomerc
+          MYSQL_PASSWORD: passcomerc
+      volumes:
+          - db_data:/var/lib/mysql  # Adicione um volume para persistir os dados do MySQL
+
+volumes:
+    db_data:
+
+

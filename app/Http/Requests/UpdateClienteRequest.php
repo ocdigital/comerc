@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Contracts\Validation\Validator;
 
-class StoreClienteRequest extends FormRequest
+class UpdateClienteRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,9 +23,9 @@ class StoreClienteRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+       return [
             'nome' => 'required|string',
-            'email' => 'required|email|unique:clientes,email',
+            'email' => 'required|email|unique:clientes,email,' . $this->cliente->id,
             'telefone' => 'required|string',
             'data_nascimento' => 'required|date',
             'endereco' => 'required|string',
@@ -49,7 +49,6 @@ class StoreClienteRequest extends FormRequest
             'nome.required' => 'O campo nome é obrigatório',
             'email.required' => 'O campo email é obrigatório',
             'email.email' => 'O campo email deve ser um email válido',
-            'email.unique' => 'O campo email já está cadastrado',
             'telefone.required' => 'O campo telefone é obrigatório',
             'data_nascimento.required' => 'O campo data de nascimento é obrigatório',
             'data_nascimento.date' => 'O campo data de nascimento deve ser uma data válida',
