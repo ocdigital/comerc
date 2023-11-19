@@ -29,8 +29,7 @@ class Pedido extends Model
     public function produtos()
     {
         return $this->belongsToMany(Produto::class, 'pedido_produto') // Alteração no nome da tabela pivot
-        ->withPivot('quantidade')
-        ->withTimestamps();
+            ->withPivot('quantidade')
+            ->withTimestamps();
     }
-
 }

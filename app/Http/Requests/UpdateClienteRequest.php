@@ -35,6 +35,10 @@ class UpdateClienteRequest extends FormRequest
         ];
     }
 
+    /**
+     * Para retornar erros na API em JSON.
+     */
+
     public function failedValidation(Validator $validator): void
     {
         $response = response()->json($validator->errors(), 422);
@@ -42,6 +46,9 @@ class UpdateClienteRequest extends FormRequest
     }
 
 
+    /**
+     * Tradução das mensagens de erro
+    */
 
     public function messages(): array
     {

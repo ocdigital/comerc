@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 
 
-class ProdutoRequest extends FormRequest
+class UpdateProdutoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +26,13 @@ class ProdutoRequest extends FormRequest
     {
         return [
             'nome' => 'required|string',
-            'preco' => 'required|numeric',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'preco' => 'required|numeric'
         ];
     }
+
+    /**
+     * Para retornar erros na API em JSON.
+    */
 
     public function failedValidation(Validator $validator): void
     {
@@ -37,6 +40,9 @@ class ProdutoRequest extends FormRequest
         throw new ValidationException($validator, $response);
     }
 
+    /**
+     * Tradução das mensagens de erro
+     */
     public function messages(): array
     {
         return [

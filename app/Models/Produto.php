@@ -16,5 +16,4 @@ class Produto extends Model
         'preco',
         'foto',
     ];
-
 }

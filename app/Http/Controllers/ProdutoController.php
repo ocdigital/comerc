@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Produto;
 use Illuminate\Http\Request;
-use App\Http\Requests\ProdutoRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ProdutoResource;
+use App\Http\Requests\StoreProdutoRequest;
+use App\Http\Requests\UpdateProdutoRequest;
 
 
 class ProdutoController extends Controller
@@ -21,7 +22,6 @@ class ProdutoController extends Controller
     {
         $produtos = Produto::paginate(10);
         return ProdutoResource::collection($produtos);
-
     }
 
     /**
@@ -31,7 +31,7 @@ class ProdutoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function store(ProdutoRequest $request)
+    public function store(StoreProdutoRequest $request)
     {
         try {
             if ($request->hasFile('foto')) {
@@ -70,7 +70,7 @@ class ProdutoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(ProdutoRequest $request, Produto $produto)
+    public function update(UpdateProdutoRequest $request, Produto $produto)
     {
         try {
             $dadosProduto = $request->except('foto');

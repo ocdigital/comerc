@@ -7,8 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use App\Http\Resources\ClienteResource;
-use GuzzleHttp\Client;
-use Illuminate\Support\Facades\Notification;
 
 class ClienteController extends Controller
 {
@@ -36,7 +34,7 @@ class ClienteController extends Controller
             $cliente = Cliente::create($request->all());
             return response()->json($cliente, 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Não é possível criar o cliente',$e], 400);
+            return response()->json(['error' => 'Não é possível criar o cliente', $e], 400);
         }
     }
 
