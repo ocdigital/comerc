@@ -6,6 +6,7 @@ use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PedidoResource;
+use Illuminate\Support\Facades\Notification;
 
 class PedidoController extends Controller
 {
@@ -32,6 +33,11 @@ class PedidoController extends Controller
             }
 
             DB::commit();
+
+            $cliente = $pedido->cliente;
+
+            Notification::route('mail', $cliente->email)
+                ->notify(new \App\Notifications\newOrder());
 
             return response()->json($pedido, 201);
         } catch (\Exception $e) {
