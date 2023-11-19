@@ -36,7 +36,7 @@ class ClienteController extends Controller
             $cliente = Cliente::create($request->all());
             return response()->json($cliente, 201);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Não é possível criar o cliente'], 400);
+            return response()->json(['error' => 'Não é possível criar o cliente',$e], 400);
         }
     }
 

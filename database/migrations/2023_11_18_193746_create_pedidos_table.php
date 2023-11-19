@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('pedidos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('cliente_id')->constrained('clientes');
+            $table->foreignId('codigo_cliente')->constrained('clientes');
             $table->timestamp('data_criacao')->useCurrent(); // talvez não seja necessário pois temos o created_at
             $table->softDeletes();
             $table->timestamps();

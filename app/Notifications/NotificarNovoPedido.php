@@ -8,7 +8,12 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Models\Pedido;
 
-class NovoPedido extends Notification
+/**
+ * Notificação enviada para o cliente quando um novo pedido é criado.
+ *
+ */
+
+class NotificarNovoPedido extends Notification
 {
     use Queueable;
 
@@ -21,7 +26,6 @@ class NovoPedido extends Notification
     {
         $this->pedido = $pedido;
     }
-
 
     /**
      * Get the notification's delivery channels.

@@ -6,8 +6,7 @@ use App\Models\Pedido;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PedidoResource;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\NovoPedido;
+use App\Notifications\NotificarNovoPedido;
 
 class PedidoController extends Controller
 {
@@ -38,10 +37,11 @@ class PedidoController extends Controller
             DB::beginTransaction(); // Inicia uma transação no banco de dados
 
             $pedido = Pedido::create([
-                'cliente_id' => $request->cliente_id,
+                'codigo_cliente' => $request->codigo_cliente,
             ]);
 
             foreach ($request->produtos as $produto) {
+
                 $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
             }
 
@@ -49,9 +49,7 @@ class PedidoController extends Controller
 
             $cliente = $pedido->cliente;
 
-            $pedido['valor_total'] = $pedido->valorTotalDoPedido();
-
-            $cliente->notify(new NovoPedido($pedido)); // Notifica o cliente sobre o novo pedido
+            $cliente->notify(new NotificarNovoPedido($pedido)); // Notifica o cliente sobre o novo pedido
 
             return response()->json($pedido, 201);
         } catch (\Exception $e) {
@@ -104,7 +102,7 @@ class PedidoController extends Controller
         try {
             DB::beginTransaction(); // Inicia uma transação no banco de dados
 
-            $produtoIds = $pedido->produtos()->pluck('produto_id')->toArray();
+            $produtoIds = $pedido->produtos()->pluck('pedido_id')->toArray();
 
             $pedido->produtos()->updateExistingPivot($produtoIds, ['deleted_at' => now()]);
 

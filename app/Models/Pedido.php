@@ -13,7 +13,7 @@ class Pedido extends Model
 
 
     protected $fillable = [
-        'cliente_id'
+        'codigo_cliente'
     ];
 
     protected $dates = [
@@ -22,23 +22,15 @@ class Pedido extends Model
 
     public function cliente()
     {
-        return $this->belongsTo(Cliente::class, 'cliente_id');
+        return $this->belongsTo(Cliente::class, 'codigo_cliente');
     }
+
 
     public function produtos()
     {
-        return $this->belongsToMany(Produto::class, 'pedido_produto')
-            ->withPivot('quantidade')
-            ->withTimestamps();
+        return $this->belongsToMany(Produto::class, 'pedido_produto') // Alteração no nome da tabela pivot
+        ->withPivot('quantidade')
+        ->withTimestamps();
     }
 
-
-    public function valorTotalDoPedido()
-    {
-        $total = 0;
-        foreach ($this->produtos as $produto) {
-            $total += $produto->preco * $produto->pivot->quantidade;
-        }
-        return $total;
-    }
 }
