@@ -14,9 +14,10 @@ services:
       MYSQL_ROOT_PASSWORD: comerc2023
       MYSQL_USER: usercomerc
       MYSQL_PASSWORD: passcomerc
+      QUEUE_CONNECTION: database
+
     depends_on:
       - db
-
   db:
       image: mysql:8.0
       ports:
@@ -27,7 +28,15 @@ services:
           MYSQL_USER: usercomerc
           MYSQL_PASSWORD: passcomerc
       volumes:
-          - db_data:/var/lib/mysql  # Adicione um volume para persistir os dados do MySQL
+          - db_data:/var/lib/mysql
+  queue:
+    build:
+      context: .
+    command: php artisan queue:work
+    depends_on:
+      - app
+    environment:
+      - QUEUE_CONNECTION=database
 
 volumes:
     db_data:

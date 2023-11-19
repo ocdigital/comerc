@@ -11,6 +11,7 @@ class Pedido extends Model
     use HasFactory;
     use SoftDeletes;
 
+
     protected $fillable = [
         'cliente_id'
     ];
@@ -29,5 +30,14 @@ class Pedido extends Model
         return $this->belongsToMany(Produto::class, 'pedido_produto')
             ->withPivot('quantidade')
             ->withTimestamps();
+    }
+
+    public function valorTotal()
+    {
+        $total = 0;
+        foreach ($this->produtos as $produto) {
+            $total += $produto->preco * $produto->pivot->quantidade;
+        }
+        return $total;
     }
 }

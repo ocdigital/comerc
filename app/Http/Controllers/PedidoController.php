@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Resources\PedidoResource;
 use Illuminate\Support\Facades\Notification;
+use App\Notifications\NovoPedido;
 
 class PedidoController extends Controller
 {
@@ -27,7 +28,6 @@ class PedidoController extends Controller
                 'cliente_id' => $request->cliente_id,
             ]);
 
-            // Adicione os produtos ao pedido
             foreach ($request->produtos as $produto) {
                 $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
             }
@@ -36,8 +36,11 @@ class PedidoController extends Controller
 
             $cliente = $pedido->cliente;
 
-            Notification::route('mail', $cliente->email)
-                ->notify(new \App\Notifications\newOrder());
+            $pedido['valor_total'] = $pedido->valorTotal();
+
+            $cliente->notify(new NovoPedido($pedido));
+
+
 
             return response()->json($pedido, 201);
         } catch (\Exception $e) {

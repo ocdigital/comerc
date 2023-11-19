@@ -6,18 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use App\Models\Pedido;
 
-class newOrder extends Notification implements ShouldQueue
+class NovoPedido extends Notification
 {
     use Queueable;
+
+    protected $pedido;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(Pedido $pedido)
     {
-        //
+        $this->pedido = $pedido;
     }
+
 
     /**
      * Get the notification's delivery channels.
@@ -35,9 +39,8 @@ class newOrder extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+            ->view('emails.novo_pedido', ['pedido' => $this->pedido])
+            ->subject('Novo Pedido Realizado');
     }
 
     /**

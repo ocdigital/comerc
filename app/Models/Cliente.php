@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
 class Cliente extends Model
 {
     use HasFactory;
     use SoftDeletes;
+    use Notifiable;
 
     protected $fillable = [
         'nome',
@@ -31,6 +33,5 @@ class Cliente extends Model
     public function pedidos()
     {
         return $this->hasMany(Pedido::class, 'cliente_id');
-
     }
 }
