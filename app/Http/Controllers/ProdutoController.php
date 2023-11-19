@@ -6,18 +6,30 @@ use App\Models\Produto;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProdutoRequest;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ProdutoResource;
 
 
 class ProdutoController extends Controller
 {
+    /**
+     *  Exibe todos os produtos com paginação.
+     *  Utilizando ProdutoResource para formatar a resposta.
+     * @return \Illuminate\Http\Response
+     */
 
     public function index()
     {
+        $produtos = Produto::paginate(10);
+        return ProdutoResource::collection($produtos);
 
-
-        $produtos = Produto::all();
-        return response()->json($produtos, 200);
     }
+
+    /**
+     *  Cria um novo produto.
+     *  Utilizando ProdutoRequest para validar os dados recebidos.     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 
     public function store(ProdutoRequest $request)
     {
@@ -39,34 +51,55 @@ class ProdutoController extends Controller
         }
     }
 
+    /**
+     *  Exibe um produto específico.
+     * @param  \App\Models\Produto  $produto
+     * @return \Illuminate\Http\Response
+     */
 
     public function show(Produto $produto)
     {
         return response()->json($produto, 200);
     }
 
-    //TODO: Implementar o update
-    // public function update(Request $request, Produto $produto)
-    // {
-    //     dd($request->all());
-    //   try {
-    //         if ($request->hasFile('foto')) {
-    //         $foto = $request->file('foto');
-    //         $nomeFoto = time() . '_' . $foto->getClientOriginalName();
+    /**
+     *  Atualiza um produto específico.
+     *  Utilizando ProdutoRequest para validar os dados recebidos.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Produto  $produto
+     * @return \Illuminate\Http\Response
+     */
 
-    //         Storage::disk('public')->put($nomeFoto, file_get_contents($foto));
+    public function update(ProdutoRequest $request, Produto $produto)
+    {
+        try {
+            $dadosProduto = $request->except('foto');
 
-    //         $dadosProduto = $request->all();
-    //         $dadosProduto['foto'] = $nomeFoto;
+            if ($request->hasFile('foto')) {
+                if ($produto->foto) {
+                    Storage::disk('public')->delete($produto->foto);
+                }
 
-    //         $produto = Produto::create($dadosProduto);
-    //         return response()->json($produto, 201);
-    //     }
-    //     } catch (\Exception $e) {
-    //         return response()->json(['error' => 'Não é possível atualizar o produto'], 400);
-    //     }
-    // }
+                $novaFoto = $request->file('foto');
+                $nomeNovaFoto = time() . '_' . $novaFoto->getClientOriginalName();
+                Storage::disk('public')->put($nomeNovaFoto, file_get_contents($novaFoto));
+                $dadosProduto['foto'] = $nomeNovaFoto;
+            }
 
+
+            $produto->update($dadosProduto);
+
+            return response()->json($produto, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Não é possível atualizar o produto'], 400);
+        }
+    }
+
+    /**
+     *  Exclui um produto específico.
+     * @param  \App\Models\Produto  $produto
+     * @return \Illuminate\Http\Response
+     */
 
     public function destroy(Produto $produto)
     {

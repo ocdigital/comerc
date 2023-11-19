@@ -32,7 +32,8 @@ class Pedido extends Model
             ->withTimestamps();
     }
 
-    public function valorTotal()
+
+    public function valorTotalDoPedido()
     {
         $total = 0;
         foreach ($this->produtos as $produto) {

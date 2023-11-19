@@ -11,18 +11,31 @@ use App\Notifications\NovoPedido;
 
 class PedidoController extends Controller
 {
+    /**
+     *  Exibe todos os pedidos com paginação.
+     *  Utilizando eager loading para carregar os produtos do pedido.
+     *  Utilizando PedidoResource para formatar a resposta.
+     * @return \Illuminate\Http\Response
+     */
 
     public function index()
     {
-        return Pedido::all();
+        $pedidos = Pedido::with('produtos')->paginate(10);
+        return PedidoResource::collection($pedidos);
     }
 
+    /**
+     *  Cria um novo pedido.
+     *  Utilizando transação para garantir que o pedido só será criado se todos os produtos forem criados.
+     *  Notifica o cliente sobre o novo pedido.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
 
     public function store(Request $request)
     {
-
         try {
-            DB::beginTransaction();
+            DB::beginTransaction(); // Inicia uma transação no banco de dados
 
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
@@ -32,23 +45,28 @@ class PedidoController extends Controller
                 $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
             }
 
-            DB::commit();
+            DB::commit(); // Confirma todas as operações realizadas no banco de dados
 
             $cliente = $pedido->cliente;
 
-            $pedido['valor_total'] = $pedido->valorTotal();
+            $pedido['valor_total'] = $pedido->valorTotalDoPedido();
 
-            $cliente->notify(new NovoPedido($pedido));
-
-
+            $cliente->notify(new NovoPedido($pedido)); // Notifica o cliente sobre o novo pedido
 
             return response()->json($pedido, 201);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollback(); // Desfaz todas as operações realizadas no banco de dados
             return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
     }
 
+    /**
+     *  Exibe um pedido específico.
+     *  Utilizando PedidoResource para formatar a resposta.
+     *  Utilizando eager loading para carregar os produtos do pedido.
+     * @param  \App\Models\Pedido  $pedido
+     * @return \Illuminate\Http\Response
+     */
 
     public function show(Pedido $pedido)
     {
@@ -57,6 +75,12 @@ class PedidoController extends Controller
         return new PedidoResource($pedido);
     }
 
+    /**
+     *  Atualiza um pedido específico.
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Pedido  $pedido
+     * @return \Illuminate\Http\Response
+     */
 
     public function update(Request $request, Pedido $pedido)
     {
@@ -68,12 +92,17 @@ class PedidoController extends Controller
         }
     }
 
+    /**
+     *  Exclui um pedido específico.
+     *  Utilizando transação para garantir que o pedido só será excluído se todos os produtos forem excluídos.     *
+     * @param  \App\Models\Pedido  $pedido
+     * @return \Illuminate\Http\Response
+     */
 
     public function destroy(Pedido $pedido)
     {
-
         try {
-            DB::beginTransaction();
+            DB::beginTransaction(); // Inicia uma transação no banco de dados
 
             $produtoIds = $pedido->produtos()->pluck('produto_id')->toArray();
 
@@ -81,11 +110,11 @@ class PedidoController extends Controller
 
             $pedido->delete();
 
-            DB::commit();
+            DB::commit(); // Confirma todas as operações realizadas no banco de dados
 
             return response()->json(['message' => 'Pedido excluído com sucesso'], 200);
         } catch (\Exception $e) {
-            DB::rollback();
+            DB::rollback(); // Desfaz todas as operações realizadas no banco de dados
             return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
     }
