@@ -11,7 +11,7 @@ git clone https://github.com/ocdigital/comerc.git
 cd comerc  
 
 ### 4- Compilar a imagem do aplicativo
-docker-compose build app
+docker-compose build
 
 ### 5- Execute o ambiente em modo de segundo plano
 docker-compose up -d
@@ -32,13 +32,14 @@ http://localhost:8000
 docker ps
 
 ### 11- Entre no container da aplicação
-docker exec -it <nome> /bin/bash
+docker exec -it nomedocontainer /bin/bash
 
 ### 12- Rode a migrate para criar as tabelas
 php artisan migrate
 
 ### 13-Execute a seeder para gerar os produtos
 php artisan db:seed --class=ProdutoSeeder
+
 php artisan db:seed --class=ClienteSeeder
 
 ### 14-Execute os testes
