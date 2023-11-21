@@ -1,45 +1,45 @@
 
-## Aplicação Comerc Energia
+# Aplicação Comerc Energia
 
-# 1- Instalação do Docker
+### 1- Instalação do Docker
 https://www.docker.com/products/docker-desktop/
 
-# 2- Clone o projeto do git 
+### 2- Clone o projeto do git 
 git clone https://github.com/ocdigital/comerc.git
 
-# 3- Entre na pasta do projeto 
+### 3- Entre na pasta do projeto 
 cd comerc  
 
-# 4- Compilar a imagem do aplicativo
+### 4- Compilar a imagem do aplicativo
 docker-compose build app
 
-# 5- Execute o ambiente em modo de segundo plano
+### 5- Execute o ambiente em modo de segundo plano
 docker-compose up -d
 
-# 6- Instalar as dependências do aplicativo
+### 6- Instalar as dependências do aplicativo
 composer install
 
-# 7- Crie o arquivo .env
+### 7- Crie o arquivo .env
 cp .env.example .env
 
-# 8- Gere uma chave única para o aplicativo
+### 8- Gere uma chave única para o aplicativo
 php artisan key:generate
 	
-# 9- Teste no endereço
+### 9- Teste no endereço
 http://localhost:8000
 
-# 10- Veja os containers
+### 10- Veja os containers
 docker ps
 
-# 11- Entre no container da aplicação
+### 11- Entre no container da aplicação
 docker exec -it <nome> /bin/bash
 
-# 12- Rode a migrate para criar as tabelas
+### 12- Rode a migrate para criar as tabelas
 php artisan migrate
 
-# 13-Execute a seeder para gerar os produtos
+### 13-Execute a seeder para gerar os produtos
 php artisan db:seed --class=ProdutoSeeder
 php artisan db:seed --class=ClienteSeeder
 
-# 14-Execute os testes
+### 14-Execute os testes
 php artisan test
