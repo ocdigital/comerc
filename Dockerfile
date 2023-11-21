@@ -35,15 +35,6 @@ COPY . /var/www/html
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Install Laravel dependencies
-RUN composer install
-
-# Copy the environment file
-COPY .env.example .env
-
-# Generate the application key
-RUN php artisan key:generate
-
 # Set Apache user as the owner of Laravel files
 RUN chown -R www-data:www-data /var/www/html
 
