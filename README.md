@@ -43,3 +43,6 @@ php artisan db:seed --class=ClienteSeeder
 
 ### 14-Execute os testes
 php artisan test
+
+### Collection Postman
+Na pasta raiz existe o arquivo Comerc.postman_collection.json

@@ -1,0 +1,281 @@
+{
+	"info": {
+		"_postman_id": "2b67acd9-2740-4523-a13d-0f9f6d6afd6d",
+		"name": "Comerc",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "2748681"
+	},
+	"item": [
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "clienteList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "clienteShow",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/clientes/5"
+					},
+					"response": []
+				},
+				{
+					"name": "clienteInsert",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\":\"Eduardo\", \r\n    \"email\":\"eduardo1@gmail.com\",\r\n    \"telefone\":\"19993173936\",\r\n    \"data_nascimento\":\"1985-01-09\",\r\n    \"endereco\":\"Maria Lulu\",\r\n    \"bairro\":\"Parque Valenca\",\r\n    \"cep\":\"13058-541\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{server}} /api/clientes"
+					},
+					"response": []
+				},
+				{
+					"name": "clienteUpdate",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\":\"Eduardo Ferreira\", \r\n    \"email\":\"eduardo@gmail.com\",\r\n    \"telefone\":\"19993173936\",\r\n    \"data_nascimento\":\"1985-01-09\",\r\n    \"endereco\":\"Maria Lulu\",\r\n    \"bairro\":\"Parque Valenca\",\r\n    \"cep\":\"13058-541\"\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{server}} /api/clientes/1"
+					},
+					"response": []
+				},
+				{
+					"name": "clienteDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{server}} /api/clientes/8"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "produtoList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/produtos"
+					},
+					"response": []
+				},
+				{
+					"name": "produtoShow",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/produtos/3"
+					},
+					"response": []
+				},
+				{
+					"name": "produtoInsert",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nome",
+									"value": "TESTE1",
+									"type": "text"
+								},
+								{
+									"key": "preco",
+									"value": "99.00",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/Eduardo/Pictures/sapato.jpg",
+									"disabled": true
+								}
+							]
+						},
+						"url": "{{server}} /api/produtos"
+					},
+					"response": []
+				},
+				{
+					"name": "produtoUpdate",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "nome",
+									"value": "TESTEEDIT",
+									"type": "text"
+								},
+								{
+									"key": "preco",
+									"value": "99.9",
+									"type": "text"
+								},
+								{
+									"key": "foto",
+									"type": "file",
+									"src": "/C:/Users/Eduardo/Pictures/images.jpg"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": "{{server}} /api/produtos/1"
+					},
+					"response": []
+				},
+				{
+					"name": "produtoDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{server}} /api/produtos/4"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedido",
+			"item": [
+				{
+					"name": "pedidoList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/pedidos"
+					},
+					"response": []
+				},
+				{
+					"name": "pedidosShow",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "{{server}} /api/pedidos/19"
+					},
+					"response": []
+				},
+				{
+					"name": "pedidoInsert",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codigo_cliente\":1, \r\n    \"produtos\": [\r\n        { \"produto_id\": 3, \"quantidade\": 3 },\r\n        { \"produto_id\": 4, \"quantidade\": 1 },\r\n        { \"produto_id\": 5, \"quantidade\": 2 }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{server}} /api/pedidos"
+					},
+					"response": []
+				},
+				{
+					"name": "pedidoUpdate",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"codigo_cliente\":1, \r\n    \"produtos\": [\r\n        { \"produto_id\": 2, \"quantidade\": 3 },\r\n        { \"produto_id\": 5, \"quantidade\": 1 },\r\n        { \"produto_id\": 3, \"quantidade\": 2 }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{server}} /api/pedidos/1"
+					},
+					"response": []
+				},
+				{
+					"name": "pedidoDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "{{server}} /api/pedidos/1"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "server",
+			"value": "localhost:8000",
+			"type": "string"
+		}
+	]
+}
