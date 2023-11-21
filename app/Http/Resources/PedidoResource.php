@@ -18,7 +18,15 @@ class PedidoResource extends JsonResource
             'id' => $this->id,
             'codigo_cliente' => $this->codigo_cliente,
             'data_criacao' => $this->data_pedido,
-            'produtos' => $this->produtos,
+            'produtos' => $this->produtos->map(function ($produto) {
+                return [
+                    'id' => $produto->id,
+                    'nome' => $produto->nome,
+                    'preco' => $produto->preco,
+                    'foto' => $produto->foto,
+                    'quantidade' => $produto->pivot->quantidade,
+                ];
+            }),
         ];
     }
 }

@@ -34,26 +34,25 @@ class PedidoController extends Controller
     public function store(Request $request)
     {
         try {
-            DB::beginTransaction(); // Inicia uma transação no banco de dados
+            DB::beginTransaction();
 
             $pedido = Pedido::create([
                 'codigo_cliente' => $request->codigo_cliente,
             ]);
 
             foreach ($request->produtos as $produto) {
-
                 $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
             }
 
-            DB::commit(); // Confirma todas as operações realizadas no banco de dados
+            DB::commit();
 
             $cliente = $pedido->cliente;
 
-            $cliente->notify(new NotificarNovoPedido($pedido)); // Notifica o cliente sobre o novo pedido
+            $cliente->notify(new NotificarNovoPedido($pedido));
 
-            return response()->json($pedido, 201);
+            return response()->json(['pedido' => $pedido, 'produtos' => $pedido->produtos], 201);
         } catch (\Exception $e) {
-            DB::rollback(); // Desfaz todas as operações realizadas no banco de dados
+            DB::rollback();
             return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
     }
@@ -80,19 +79,39 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function update(Request $request, Pedido $pedido)
+    public function update(Request $request, $id)
     {
         try {
-            $pedido->update($request->all());
+            DB::beginTransaction();
+
+            $pedido = Pedido::findOrFail($id);
+
+            $pedido->update([
+                'codigo_cliente' => $request->codigo_cliente,
+            ]);
+
+            $pedido->produtos()->detach();
+
+            foreach ($request->produtos as $produto) {
+                $pedido->produtos()->attach($produto['produto_id'], ['quantidade' => $produto['quantidade']]);
+            }
+
+            $pedido->load('produtos');
+
+            DB::commit();
+
             return response()->json($pedido, 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Erro ao atualizar pedido', 'error' => $e->getMessage()], 400);
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
     }
 
+
     /**
      *  Exclui um pedido específico.
-     *  Utilizando transação para garantir que o pedido só será excluído se todos os produtos forem excluídos.     *
+     *  Utilizando transação para garantir que o pedido só será excluído se todos os produtos forem excluídos.
+     *  Utilizando soft delete para manter o histórico de pedidos.
      * @param  \App\Models\Pedido  $pedido
      * @return \Illuminate\Http\Response
      */
@@ -100,7 +119,7 @@ class PedidoController extends Controller
     public function destroy(Pedido $pedido)
     {
         try {
-            DB::beginTransaction(); // Inicia uma transação no banco de dados
+            DB::beginTransaction();
 
             $produtoIds = $pedido->produtos()->pluck('pedido_id')->toArray();
 
@@ -108,11 +127,11 @@ class PedidoController extends Controller
 
             $pedido->delete();
 
-            DB::commit(); // Confirma todas as operações realizadas no banco de dados
+            DB::commit();
 
             return response()->json(['message' => 'Pedido excluído com sucesso'], 200);
         } catch (\Exception $e) {
-            DB::rollback(); // Desfaz todas as operações realizadas no banco de dados
+            DB::rollback();
             return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTrace()], 400);
         }
     }

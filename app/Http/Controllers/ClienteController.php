@@ -79,7 +79,7 @@ class ClienteController extends Controller
     {
         try {
             $cliente->delete();
-            return response()->json(['message' => 'Cliente excluído com sucesso'], 200);
+            return response()->json(['message' => 'Cliente excluído com sucesso'], 204);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Não é possível excluir o cliente'], 400);
         }

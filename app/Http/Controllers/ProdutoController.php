@@ -59,7 +59,7 @@ class ProdutoController extends Controller
 
     public function show(Produto $produto)
     {
-        return response()->json($produto, 200);
+        return new ProdutoResource($produto);
     }
 
     /**
@@ -105,7 +105,7 @@ class ProdutoController extends Controller
     {
         try {
             $produto->delete();
-            return response()->json(['message' => 'Produto excluído com sucesso'], 200);
+            return response()->json(['message' => 'Produto excluído com sucesso'], 204);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Não é possível excluir o produto'], 400);
         }

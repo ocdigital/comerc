@@ -27,6 +27,11 @@ class NotificarNovoPedido extends Notification
         $this->pedido = $pedido;
     }
 
+    public function getPedido()
+    {
+        return $this->pedido;
+    }
+
     /**
      * Get the notification's delivery channels.
      *
