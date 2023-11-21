@@ -4,13 +4,8 @@ namespace Tests\Unit;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\UploadedFile;
 use App\Models\Pedido;
-use App\Models\Produto;
-use Illuminate\Support\Facades\Mail;
 use App\Notifications\NotificarNovoPedido;
-use Carbon\Factory;
-use Faker\Factory as FakerFactory;
 use Illuminate\Support\Facades\Notification;
 use Database\Factories\ClienteFactory;
 use Database\Factories\ProdutoFactory;
